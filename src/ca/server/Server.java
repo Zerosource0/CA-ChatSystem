@@ -22,6 +22,7 @@ public class Server implements Observer {
 
     private static final Properties properties = Utils.initProperties("server.properties");
     ServerSocket ss;
+<<<<<<< HEAD
     private boolean isRunning = true;
     private static ArrayList<ClientHandler> clientList = new ArrayList<ClientHandler>();
 
@@ -34,6 +35,10 @@ public class Server implements Observer {
     public static ServerMessages getSysMsg() {
         return sysMsg;
     }
+=======
+    private boolean isRunning=true;
+    private static ArrayList <ClientHandler> clientList = new ArrayList<ClientHandler>() ;
+>>>>>>> origin/master
 
     public static void main(String[] args) {
         // TODO code application logic here
@@ -42,6 +47,7 @@ public class Server implements Observer {
         new Server().runServer();
 
     }
+<<<<<<< HEAD
 
     public static void sendToUsers(ArrayList<ClientHandler> reciepients, String msg) {
         for (ClientHandler reciepient : reciepients) {
@@ -51,6 +57,23 @@ public class Server implements Observer {
 
     public static void sendAll(String msg) {
         for (ClientHandler client : clientList) {
+=======
+    public void sendSpecific (String msg)
+    {
+        for (ClientHandler client : clientList) 
+        {
+           // if (client.)client.send(msg);
+        }
+    }
+    public static ArrayList<ClientHandler> allUsers ()
+    {
+        return clientList;
+    }
+    public void sendAll (String msg)
+    {
+        for (ClientHandler client : clientList) 
+        {
+>>>>>>> origin/master
             client.send(msg);
         }
     }
