@@ -19,13 +19,13 @@ import shared.ProtocolStrings;
  *
  * @author Adam
  */
-public class ClientThread extends Observable implements Runnable
+public class ClientHandler extends Observable implements Runnable
 {
     Scanner input;
     PrintWriter writer;
     private Socket socket;
     private Observer o;
-    public ClientThread (Socket s, Observer o) throws IOException
+    public ClientHandler (Socket s, Observer o) throws IOException
     {
         this.o=o;
         this.socket=s;
@@ -36,8 +36,9 @@ public class ClientThread extends Observable implements Runnable
     @Override
     public void run() 
     {
-    
+        System.out.println("waiting for fist message");
     String message = input.nextLine();
+        System.out.println("first message recieved");
     Logger.getLogger(Server.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ",message));
     while (!message.equals(ProtocolStrings.STOP)) {
         setChanged();
@@ -52,7 +53,7 @@ public class ClientThread extends Observable implements Runnable
             remove();
             
         } catch (IOException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     Logger.getLogger(Server.class.getName()).log(Level.INFO, "Closed a Connection");
     }
@@ -62,7 +63,7 @@ public class ClientThread extends Observable implements Runnable
     }
     public void send(String msg)
     {
-        writer.println(msg.toUpperCase());
+        writer.println(msg);
         
     }
 

@@ -27,7 +27,7 @@ public class Server implements Observer{
     private static final Properties properties = Utils.initProperties("server.properties");
     ServerSocket ss;
     private boolean isRunning=true;
-    private static List <ClientThread> clientList = new ArrayList<ClientThread>() ;
+    private static List <ClientHandler> clientList = new ArrayList<ClientHandler>() ;
 
     /**
      * @param args the command line arguments
@@ -40,7 +40,14 @@ public class Server implements Observer{
 
         
     }
-    public static void removeClient (ClientThread ct)
+    public void sendAll (String msg)
+    {
+        for (ClientHandler client : clientList) 
+        {
+            client.send(msg);
+        }
+    }
+    public static void removeClient (ClientHandler ct)
     {
         clientList.remove(ct);
         
@@ -72,15 +79,16 @@ public class Server implements Observer{
     }
     private void handleClient(Socket s) throws IOException
     {
-        ClientThread ct = new ClientThread(s, this);
-        Thread t = new Thread();
+        ClientHandler ch = new ClientHandler(s, this);
+        Thread t = new Thread(ch);
         t.start();
-        clientList.add(ct);
+        clientList.add(ch);
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(Observable o, Object arg) 
+    {
+        sendAll((String)arg);
     }
     
     
