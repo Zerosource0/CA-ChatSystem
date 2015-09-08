@@ -27,7 +27,7 @@ public class Server implements Observer{
     private static final Properties properties = Utils.initProperties("server.properties");
     ServerSocket ss;
     private boolean isRunning=true;
-    private static List <ClientHandler> clientList = new ArrayList<ClientHandler>() ;
+    private static ArrayList <ClientHandler> clientList = new ArrayList<ClientHandler>() ;
 
     /**
      * @param args the command line arguments
@@ -39,6 +39,17 @@ public class Server implements Observer{
         new Server().runServer();
 
         
+    }
+    public void sendSpecific (String msg)
+    {
+        for (ClientHandler client : clientList) 
+        {
+           // if (client.)client.send(msg);
+        }
+    }
+    public static ArrayList<ClientHandler> allUsers ()
+    {
+        return clientList;
     }
     public void sendAll (String msg)
     {

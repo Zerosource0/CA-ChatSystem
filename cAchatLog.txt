@@ -1,16 +1,10 @@
-Sep 08, 2015 1:20:55 PM ca.server.Server runServer
+Sep 08, 2015 1:54:04 PM ca.server.Server runServer
 INFO: Sever started. Listening on: 9090, bound to: localhost
-Sep 08, 2015 1:21:15 PM ca.server.Server runServer
+Sep 08, 2015 1:54:13 PM ca.server.Server runServer
 INFO: Connected to a client
-Sep 08, 2015 1:21:15 PM ca.server.ClientHandler run
+Sep 08, 2015 1:54:13 PM ca.server.ClientHandler run
 INFO: Received the message: USER#ADAM 
-Sep 08, 2015 1:21:15 PM ca.server.ClientHandler run
+Sep 08, 2015 1:54:13 PM ca.server.ClientHandler run
 INFO: Received the message: USER#ADAM 
-Sep 08, 2015 1:21:28 PM ca.server.Server runServer
-INFO: Connected to a client
-Sep 08, 2015 1:21:28 PM ca.server.ClientHandler run
-INFO: Received the message: USER#MARC 
-Sep 08, 2015 1:21:28 PM ca.server.ClientHandler run
-INFO: Received the message: USER#MARC 
-Sep 08, 2015 1:21:37 PM ca.server.ClientHandler run
-INFO: Received the message: MARC: SUCK MY DICK 
+Sep 08, 2015 1:54:31 PM ca.server.ClientHandler run
+INFO: Received the message: ADAM: GSGMKLFDKM 
