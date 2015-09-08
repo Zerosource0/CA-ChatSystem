@@ -1,2 +1,2 @@
-Sep 08, 2015 11:26:22 AM ca.server.Server runServer
+Sep 08, 2015 11:58:25 AM ca.server.Server runServer
 INFO: Sever started. Listening on: 9090, bound to: localhost

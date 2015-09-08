@@ -11,6 +11,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +23,7 @@ import utils.Utils;
  */
 
 
-public class Server {
+public class Server implements Observer{
     private static final Properties properties = Utils.initProperties("server.properties");
     ServerSocket ss;
     private boolean isRunning=true;
@@ -38,6 +40,12 @@ public class Server {
 
         
     }
+    public static void removeClient (ClientThread ct)
+    {
+        clientList.remove(ct);
+        
+    }
+    
     private void runServer ()
     {
         int port = Integer.parseInt(properties.getProperty("port"));
@@ -62,12 +70,18 @@ public class Server {
                Utils.closeLogger(Server.class.getName());
         }
     }
-    private void handleClient(Socket s)
+    private void handleClient(Socket s) throws IOException
     {
-        ClientThread ct = new ClientThread();
-        Thread t = new Thread(ct);
+        ClientThread ct = new ClientThread(s, this);
+        Thread t = new Thread();
         t.start();
         clientList.add(ct);
     }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }
