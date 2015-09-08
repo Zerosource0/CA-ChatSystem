@@ -1,0 +1,3 @@
+Marc
+MoroMachine,moromachine.cloudapp.net
+local,localhost

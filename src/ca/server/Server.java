@@ -16,7 +16,7 @@ import java.util.Observer;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import utils.Utils;
+import ca.utils.Utils;
 /**
  *
  * @author marcj_000

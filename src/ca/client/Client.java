@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
@@ -25,7 +26,42 @@ public class Client extends Observable implements Runnable {
     String ip;
     int port;
     String userName;
-    
+    private ArrayList<String> users;
+    MessageProcessor msgProcessor;
+    public Settings settings;
+
+    public Client() {
+
+        settings = new Settings(this);
+        settings.loadSettings();
+        msgProcessor = new MessageProcessor(this);
+        users = new ArrayList();
+    }
+
+    public ArrayList<ServerInfo> getServers() {
+        return settings.getServers();
+    }
+
+    public void setServers(ArrayList<ServerInfo> servers) {
+        settings.setServers(servers);
+    }
+
+    public void loadSettings() {
+        settings.loadSettings();
+    }
+
+    public void saveSettings() {
+        settings.saveSettings();
+    }
+
+    public ArrayList<String> getUsers() {
+        return users;
+    }
+
+    public void setUsers(ArrayList<String> users) {
+        this.users = users;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -41,8 +77,7 @@ public class Client extends Observable implements Runnable {
     public void setIp(String ip) {
         this.ip = ip;
     }
-    
-    
+
     public void connect(String address, int port) throws UnknownHostException, IOException {
         this.port = port;
         serverAddress = InetAddress.getByName(address);
@@ -51,8 +86,6 @@ public class Client extends Observable implements Runnable {
         output = new PrintWriter(socket.getOutputStream(), true);
         send("USER#" + userName);
     }
-    
-    
 
     public void send(String msg) {
         output.println(msg);
