@@ -25,20 +25,31 @@ public class ClientHandler extends Observable implements Runnable
     PrintWriter writer;
     private Socket socket;
     private Observer o;
+    private String clientName;
+    ServerMessages sMsgs;
+    
+    public String getClientName() {
+        return clientName;
+    }
+    
     public ClientHandler (Socket s, Observer o) throws IOException
     {
         this.o=o;
         this.socket=s;
+        sMsgs = new ServerMessages(Server.getClientList());
         input = new Scanner(socket.getInputStream());
         writer = new PrintWriter(socket.getOutputStream(), true);
         addObserver(o);
+        
     }
     @Override
     public void run() 
     {
-        System.out.println("waiting for fist message");
-    String message = input.nextLine();
+        String temp[] = input.nextLine().split("USER#");
+        clientName = temp[1];
+        Server.getSysMsg().sendList();
         System.out.println("first message recieved");
+        String message = input.nextLine();
     Logger.getLogger(Server.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ",message));
     while (!message.equals(ProtocolStrings.STOP)) {
         setChanged();
@@ -51,7 +62,7 @@ public class ClientHandler extends Observable implements Runnable
     try {
             socket.close();
             remove();
-            
+            Server.getSysMsg().sendList();
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }

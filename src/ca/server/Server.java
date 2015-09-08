@@ -17,21 +17,24 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ca.utils.Utils;
-/**
- *
- * @author marcj_000
- */
-
 
 public class Server implements Observer{
     private static final Properties properties = Utils.initProperties("server.properties");
     ServerSocket ss;
     private boolean isRunning=true;
-    private static List <ClientHandler> clientList = new ArrayList<ClientHandler>() ;
+    private static ArrayList <ClientHandler> clientList = new ArrayList<ClientHandler>() ;
 
-    /**
-     * @param args the command line arguments
-     */
+    public static ArrayList<ClientHandler> getClientList() {
+        return clientList;
+    }
+
+
+    private static ServerMessages sysMsg;
+
+    public static ServerMessages getSysMsg() {
+        return sysMsg;
+    }
+    
     public static void main(String[] args) {
         // TODO code application logic here
         String logFile = properties.getProperty("logFile");
@@ -40,7 +43,7 @@ public class Server implements Observer{
 
         
     }
-    public void sendAll (String msg)
+    public static void sendAll (String msg)
     {
         for (ClientHandler client : clientList) 
         {
@@ -66,6 +69,7 @@ public class Server implements Observer{
             {
                 Socket socket = ss.accept();
                 Logger.getLogger(Server.class.getName()).log(Level.INFO, "Connected to a client");
+                
                 handleClient(socket);
             } while (isRunning);
         } 
@@ -83,6 +87,7 @@ public class Server implements Observer{
         Thread t = new Thread(ch);
         t.start();
         clientList.add(ch);
+        sysMsg = new ServerMessages(clientList);
     }
 
     @Override

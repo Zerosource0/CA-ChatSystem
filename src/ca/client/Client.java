@@ -93,11 +93,14 @@ public class Client extends Observable implements Runnable {
 
     @Override
     public void run() {
-        String msg = input.nextLine(); //blocking call
+        String msg = input.nextLine();  //blocking call
+        msg = msgProcessor.process(msg);
         while (!msg.equals("STOP#")) {
+
             setChanged();
             notifyObservers(msg);
             msg = input.nextLine();
+            msg = msgProcessor.process(msg);
         }
         try {
             socket.close();
