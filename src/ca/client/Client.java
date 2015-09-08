@@ -5,10 +5,71 @@
  */
 package ca.client;
 
-/**
- *
- * @author marcj_000
- */
-public class Client {
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Observable;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class Client extends Observable implements Runnable {
+
+    Socket socket;
+    InetAddress serverAddress;
+    Scanner input;
+    PrintWriter output;
+    String ip;
+    int port;
+    String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
     
+    
+    public void connect(String address, int port) throws UnknownHostException, IOException {
+        this.port = port;
+        serverAddress = InetAddress.getByName(address);
+        socket = new Socket(serverAddress, port);
+        input = new Scanner(socket.getInputStream());
+        output = new PrintWriter(socket.getOutputStream(), true);
+        send("USER#" + userName);
+    }
+    
+    
+
+    public void send(String msg) {
+        output.println(msg);
+    }
+
+    @Override
+    public void run() {
+        String msg = input.nextLine(); //blocking call
+        while (!msg.equals("STOP#")) {
+            setChanged();
+            notifyObservers(msg);
+            msg = input.nextLine();
+        }
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }
