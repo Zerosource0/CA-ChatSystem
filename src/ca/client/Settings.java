@@ -61,7 +61,7 @@ public class Settings {
 
     public void saveSettings() {
         ArrayList<String> saves = new ArrayList();
-        saves.add(name);
+        saves.add(getName());
         if (!servers.isEmpty()) {
             for (ServerInfo s : servers) {
                 saves.add(s.name + "," + s.ip);

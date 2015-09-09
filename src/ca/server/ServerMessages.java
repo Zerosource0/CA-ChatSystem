@@ -29,6 +29,7 @@ public class ServerMessages {
             msg = msg.concat(client.getClientName()+",");
             
         }
+        msg = msg.substring(0, msg.length()-1);
         System.out.println("SOUT: SENDING CLIENTLIST: " +msg);
         Server.sendAll(msg);
     }

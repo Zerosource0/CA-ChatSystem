@@ -175,7 +175,7 @@ public class settingGui extends javax.swing.JFrame {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void renameButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_renameButtonActionPerformed
-        origin.name = inputName();
+        origin.setNickName(inputName());
         nameLabel.setText(origin.client.getUserName());
     }//GEN-LAST:event_renameButtonActionPerformed
 

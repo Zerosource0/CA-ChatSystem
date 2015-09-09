@@ -9,16 +9,23 @@ import ca.client.Client;
 import ca.client.ServerInfo;
 import ca.client.MessageProcessor;
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -35,10 +42,18 @@ public class gui extends javax.swing.JFrame implements Observer {
     String message;
     String ip;
     Boolean connected;
-    String name;
+    String nickName;
     ArrayList<String> prefixHistory;
     int prefixIterator;
     ArrayList<String> multipleReciepients;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     public void connect() {
         prefixHistory = new ArrayList();
@@ -48,13 +63,12 @@ public class gui extends javax.swing.JFrame implements Observer {
 
         client.addObserver(this);
         try {
-            System.out.println("Connecting with settings: " + client.getIp() + ", " + name);
+            System.out.println("Connecting with settings: " + client.getIp() + ", " + nickName);
             client.connect(client.getIp(), 9090);
             connected = true;
             serverMenu.setEnabled(false);
             connectMenuButton.setEnabled(false);
             disconnectMenuButton.setEnabled(true);
-            serverNameLabel.setText("Users connected to " + client.getIp());
             chatTextList.setText(chatTextList.getText() + "\nConnected to " + client.getIp());
             t1.start();
         } catch (Exception ex) {
@@ -76,12 +90,41 @@ public class gui extends javax.swing.JFrame implements Observer {
 
     }
 
+    public void setIcons() {
+        ArrayList<Image> imageList = new ArrayList<Image>();
+
+        BufferedImage img1 = null;
+        BufferedImage img2 = null;
+        BufferedImage img3 = null;
+        BufferedImage img4 = null;
+
+        try {
+            img1 = ImageIO.read(new File("/src/icon/frenchyChaticon128.png"));
+            img2 = ImageIO.read(new File("/src/icon/frenchyChaticon64.png"));
+            img3 = ImageIO.read(new File("/src/icon/frenchyChaticon32.png"));
+            img4 = ImageIO.read(new File("/src/icon/frenchyChaticon16.png"));
+            imageList.add(img1);
+            imageList.add(img2);
+            imageList.add(img3);
+            imageList.add(img4);
+        } catch (IOException e) {
+        }
+
+        //Image icon = Toolkit.getDefaultToolkit().getImage("/src/icon/frenchyChaticon16.png");
+        this.setIconImages(imageList);
+
+    }
+
+    ;
+    
     public gui() {
+
         initComponents();
+        setIcons();
         this.setTitle("Frenchy Chat");
+
         userList.setModel(new DefaultListModel());
 
-        serverNameLabel.setText("Waiting for Connection");
         disconnectMenuButton.setEnabled(false);
         chatTextList.setEditable(false);
         messageField.requestFocus();
@@ -90,7 +133,7 @@ public class gui extends javax.swing.JFrame implements Observer {
         userList.removeAll();
         client.loadSettings();
         ip = client.getIp();
-        name = client.getUserName();
+        nickName = client.getUserName();
         updateServerMenu();
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
@@ -118,7 +161,6 @@ public class gui extends javax.swing.JFrame implements Observer {
         chatTextList = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         userList = new javax.swing.JList();
-        serverNameLabel = new javax.swing.JLabel();
         prefixLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -181,8 +223,6 @@ public class gui extends javax.swing.JFrame implements Observer {
         });
         jScrollPane3.setViewportView(userList);
 
-        serverNameLabel.setText("Looong server name trorlrorlrorlrorlrorrlrllrorororror");
-
         prefixLabel.setText("prefix");
 
         jLabel1.setText("Prefix:");
@@ -233,32 +273,25 @@ public class gui extends javax.swing.JFrame implements Observer {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                             .addComponent(messageField))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(serverNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)))
+                            .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(5, 5, 5)
-                        .addComponent(prefixLabel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(prefixLabel)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(serverNameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(prefixLabel)
@@ -285,9 +318,10 @@ public class gui extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_messageFieldMouseClicked
 
     private void messageFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageFieldActionPerformed
+        //chatTextList.setText(chatTextList.getText() + "\n" + nickName + ": " + messageField.getText()); //remove this!
         checkConnectedToServer();
         multipleReciepients = new ArrayList();
-        prefixHistory.add(prefixLabel.getText());
+        if(!prefixLabel.getText().isEmpty())prefixHistory.add(prefixLabel.getText());
         prefixIterator = prefixHistory.size();
         client.send(prefixLabel.getText() + messageField.getText());
         messageField.setText("");
@@ -304,7 +338,6 @@ public class gui extends javax.swing.JFrame implements Observer {
         connectMenuButton.setEnabled(true);
         disconnectMenuButton.setEnabled(false);
         chatTextList.setText(chatTextList.getText() + "\nDisconnect from " + client.getIp());
-        serverNameLabel.setText("Waiting for Connection");
     }//GEN-LAST:event_disconnectMenuButtonActionPerformed
 
     private void settingsMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsMenuButtonActionPerformed
@@ -340,16 +373,6 @@ public class gui extends javax.swing.JFrame implements Observer {
             }
         }
 
-        //Automatically add MSG# to prefix and delete text in msgField if typed by user
-        if (evt.getKeyChar() == '#') {
-
-            if (prefixLabel.getText().equals("prefix") | prefixLabel.getText().isEmpty()) {
-                if (messageField.getText().equals("MSG")) {
-                    prefixLabel.setText("MSG#");
-                    messageField.setText("");
-                }
-            }
-        }
 
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
             try {
@@ -414,7 +437,11 @@ public class gui extends javax.swing.JFrame implements Observer {
         userList.removeAll();
         DefaultListModel listModel = new DefaultListModel();
         for (String user : client.getUsers()) {
-            listModel.addElement(user);
+            if (user.equals(client.getUserName())) {
+                listModel.addElement(user + "(You)");
+            } else {
+                listModel.addElement(user);
+            }
         }
         userList.setModel(listModel);
     }
@@ -471,7 +498,6 @@ public class gui extends javax.swing.JFrame implements Observer {
     private javax.swing.JLabel prefixLabel;
     private javax.swing.JButton sendButton;
     private javax.swing.JMenu serverMenu;
-    private javax.swing.JLabel serverNameLabel;
     private javax.swing.JMenuItem settingsMenuButton;
     private javax.swing.JList userList;
     // End of variables declaration//GEN-END:variables

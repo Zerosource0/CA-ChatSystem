@@ -24,15 +24,17 @@ public class MessageProcessor {
         //if message starts with MSG#, remove MSG#-tag. Find cleints and send message to them.
         if (message.startsWith("MSG#") || message.startsWith("STOP#")) {
             message = message.replace("MSG#", "");
-            findUsers(message);
-        } else {
-            origin.send("Wrong syntax!");
+            if (message.startsWith("*#")) {
+                message = message.replace("*#", "");
+                Server.sendAll("MSG#"+origin.getClientName()+"#"+message);
+            } else {
+                findUsers(message);
+            }
         }
 
     }
 
     //TODO, MAKE SURE THAT PERSONS CANT SEND MESSAGES TO A RECIEPIENT MORE THAN ONCE! EX. MSG#USER1,USER1#MESSAGE
-
     private void findUsers(String message) {
         //Message should look like user,user#Message
         //first split at # to get user,user
@@ -41,7 +43,7 @@ public class MessageProcessor {
         //split[0] = user,user & split[1]message
         String users = split[0];
         try {
-                message = split[1];
+            message = split[1];
         } catch (Exception e) {
         }
 
@@ -74,14 +76,14 @@ public class MessageProcessor {
         }
         if (clientRecievers.contains(origin)) {
             clientRecievers.remove(origin);
-            origin.send("Info: You can't message yourself.");
-            if(clientRecievers.size() >= 1){
-                origin.send(origin.getClientName() + ": " + message);
+            origin.send("MSG#Server#You can't message yourself.");
+            if (clientRecievers.size() >= 1) {
+                origin.send("MSG#"+origin.getClientName() + "#" + message);
             }
         } else {
-            origin.send(origin.getClientName() + ": " + message);
+            origin.send("MSG#"+origin.getClientName() + "#" + message);
         }
-        Server.sendToUsers(clientRecievers, origin.getClientName() + ": " + message); //send messages to users.
+        Server.sendToUsers(clientRecievers, "MSG#" + origin.getClientName() + "#" + message); //send messages to users.
 
     }
 }
