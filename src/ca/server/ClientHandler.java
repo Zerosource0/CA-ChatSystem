@@ -49,7 +49,7 @@ public class ClientHandler extends Observable implements Runnable {
         clientName = temp[1]; //set clientName;
 
         Server.getSysMsg().sendList(); //Send list of users to all clients.
-
+        send("Welcome to the ChatServer " + clientName + "!");
         String message = input.nextLine();
         
         Logger.getLogger(Server.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message));
