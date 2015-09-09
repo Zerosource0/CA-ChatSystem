@@ -49,7 +49,7 @@ public class ClientHandler extends Observable implements Runnable {
         clientName = temp[1]; //set clientName;
 
         Server.getSysMsg().sendList(); //Send list of users to all clients.
-        send("Welcome to the ChatServer " + clientName + "!");
+        send("Welcome to the Frenchy Chat " + clientName + "!");
         String message = input.nextLine();
         
         Logger.getLogger(Server.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message));
@@ -60,6 +60,7 @@ public class ClientHandler extends Observable implements Runnable {
             
             //Since the message process talks directly to the Server class, we dont need to notify it.
             processor.process(message);
+            
             Logger.getLogger(Server.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message.toUpperCase()));
             message = input.nextLine();
         }
@@ -79,8 +80,9 @@ public class ClientHandler extends Observable implements Runnable {
     }
 
     public void send(String msg) {
+        
         writer.println(msg);
-
+        
     }
 
 }

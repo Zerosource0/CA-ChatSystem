@@ -1,3 +1,4 @@
 Marc
 MoroMachine,moromachine.cloudapp.net
 local,localhost
+wildfly-x,wildfly-x.cloudapp.net

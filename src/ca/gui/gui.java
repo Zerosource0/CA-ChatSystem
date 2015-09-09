@@ -78,7 +78,7 @@ public class gui extends javax.swing.JFrame implements Observer {
 
     public gui() {
         initComponents();
-
+        this.setTitle("Frenchy Chat");
         userList.setModel(new DefaultListModel());
 
         serverNameLabel.setText("Waiting for Connection");
@@ -318,13 +318,15 @@ public class gui extends javax.swing.JFrame implements Observer {
         String reciepient = userList.getSelectedValue().toString();
 
         if (shiftPressed) {
-            multipleReciepients.add(reciepient);
-            String msg = "MSG#";
-            for (String rec : multipleReciepients) {
-                msg = msg.concat(rec + ",");
+            if (!multipleReciepients.contains(reciepient)) {
+                multipleReciepients.add(reciepient);
+                String msg = "MSG#";
+                for (String rec : multipleReciepients) {
+                    msg = msg.concat(rec + ",");
+                }
+                msg = msg.concat("#");
+                prefixLabel.setText(msg);
             }
-            msg = msg.concat("#");
-            prefixLabel.setText(msg);
         } else {
             prefixLabel.setText("MSG#" + reciepient + "#");
         }

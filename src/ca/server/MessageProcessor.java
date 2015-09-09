@@ -21,7 +21,6 @@ public class MessageProcessor {
     }
 
     public void process(String message) {
-
         //if message starts with MSG#, remove MSG#-tag. Find cleints and send message to them.
         if (message.startsWith("MSG#")||message.startsWith("STOP#")) {
             message = message.replace("MSG#", "");
@@ -54,18 +53,23 @@ public class MessageProcessor {
             usersSplit = users.split(",");
         }
 
+        
+        
         //Get users
         ArrayList<ClientHandler> clientsInList = Server.getClientList();
         ArrayList<ClientHandler> clientRecievers = new ArrayList(); //make empty array to add reciepient in.
         //compare user(s) in String[] userSplit to clientHanlder.getCleintName();
         for (String user : usersSplit) {
             for (ClientHandler client : clientsInList) {
-                if (user.endsWith(client.getClientName())) {
+                if (user.equals(client.getClientName())) {
                     clientRecievers.add(client);
                 }
             }
         }
-
+        if(clientRecievers.contains(origin)){
+            clientRecievers.remove(origin);
+            origin.send("Info: You can't message yourself.");
+        }
         Server.sendToUsers(clientRecievers, origin.getClientName()+": "+message); //send messages to users.
     }
 }
