@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -35,14 +36,19 @@ public class gui extends javax.swing.JFrame implements Observer {
     String ip;
     Boolean connected;
     String name;
+    ArrayList<String> prefixHistory;
+    int prefixIterator;
+    ArrayList<String> multipleReciepients;
 
     public void connect() {
-
+        prefixHistory = new ArrayList();
+        prefixIterator = 0;
+        multipleReciepients = new ArrayList();
         Thread t1 = new Thread(client);
 
         client.addObserver(this);
         try {
-            System.out.println("Connecting with settings: " + client.getIp() +", "+name);
+            System.out.println("Connecting with settings: " + client.getIp() + ", " + name);
             client.connect(client.getIp(), 9090);
             connected = true;
             serverMenu.setEnabled(false);
@@ -72,9 +78,9 @@ public class gui extends javax.swing.JFrame implements Observer {
 
     public gui() {
         initComponents();
-               
+
         userList.setModel(new DefaultListModel());
-        
+
         serverNameLabel.setText("Waiting for Connection");
         disconnectMenuButton.setEnabled(false);
         chatTextList.setEditable(false);
@@ -113,6 +119,8 @@ public class gui extends javax.swing.JFrame implements Observer {
         jScrollPane3 = new javax.swing.JScrollPane();
         userList = new javax.swing.JList();
         serverNameLabel = new javax.swing.JLabel();
+        prefixLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         connectMenuButton = new javax.swing.JMenuItem();
@@ -175,6 +183,10 @@ public class gui extends javax.swing.JFrame implements Observer {
 
         serverNameLabel.setText("Looong server name trorlrorlrorlrorlrorrlrllrorororror");
 
+        prefixLabel.setText("prefix");
+
+        jLabel1.setText("Prefix:");
+
         jMenu1.setText("File");
 
         connectMenuButton.setText("Connect ");
@@ -216,18 +228,25 @@ public class gui extends javax.swing.JFrame implements Observer {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
-                    .addComponent(messageField))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(serverNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                            .addComponent(messageField))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(sendButton, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(serverNameLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(5, 5, 5)
+                        .addComponent(prefixLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -235,12 +254,16 @@ public class gui extends javax.swing.JFrame implements Observer {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(serverNameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(prefixLabel)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(messageField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(sendButton))
@@ -252,7 +275,7 @@ public class gui extends javax.swing.JFrame implements Observer {
 
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
         checkConnectedToServer();
-        client.send(messageField.getText());
+        client.send(prefixLabel.getText() + messageField.getText());
         messageField.setText("");
 
     }//GEN-LAST:event_sendButtonActionPerformed
@@ -263,7 +286,10 @@ public class gui extends javax.swing.JFrame implements Observer {
 
     private void messageFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_messageFieldActionPerformed
         checkConnectedToServer();
-        client.send(messageField.getText());
+        multipleReciepients = new ArrayList();
+        prefixHistory.add(prefixLabel.getText());
+        prefixIterator = prefixHistory.size();
+        client.send(prefixLabel.getText() + messageField.getText());
         messageField.setText("");
     }//GEN-LAST:event_messageFieldActionPerformed
 
@@ -288,20 +314,52 @@ public class gui extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_settingsMenuButtonActionPerformed
 
     private void userListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userListMouseClicked
-        
+
         String reciepient = userList.getSelectedValue().toString();
-        
-        String multipleReciepients = messageField.getText();
-        
-        multipleReciepients = ","+reciepient.concat(userList.getSelectedValue().toString());
-        System.out.println(multipleReciepients);
-        messageField.setText("MSG#"+reciepient+"#");
-        
-        
+
+        if (shiftPressed) {
+            multipleReciepients.add(reciepient);
+            String msg = "MSG#";
+            for (String rec : multipleReciepients) {
+                msg = msg.concat(rec + ",");
+            }
+            msg = msg.concat("#");
+            prefixLabel.setText(msg);
+        } else {
+            prefixLabel.setText("MSG#" + reciepient + "#");
+        }
     }//GEN-LAST:event_userListMouseClicked
 
+
     private void messageFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_messageFieldKeyPressed
-  
+        if (evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            if (messageField.getText().isEmpty()) {
+                prefixLabel.setText("");
+            }
+        }
+
+        //Automatically add MSG# to prefix and delete text in msgField if typed by user
+        if (evt.getKeyChar() == '#') {
+
+            if (prefixLabel.getText().equals("prefix") | prefixLabel.getText().isEmpty()) {
+                if (messageField.getText().equals("MSG")) {
+                    prefixLabel.setText("MSG#");
+                    messageField.setText("");
+                }
+            }
+        }
+
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            try {
+                prefixLabel.setText(prefixHistory.get(prefixIterator));
+            } catch (IndexOutOfBoundsException e) {
+            }
+
+            prefixIterator--;
+            if (prefixIterator == 0) {
+                prefixIterator = prefixHistory.size();
+            }
+        }
     }//GEN-LAST:event_messageFieldKeyPressed
 
     private void messageFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_messageFieldKeyReleased
@@ -311,16 +369,15 @@ public class gui extends javax.swing.JFrame implements Observer {
     private boolean shiftPressed = false;
     private void userListKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userListKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_SHIFT) {
-      shiftPressed = true;
-        
-    }   
+            shiftPressed = true;
+        }
     }//GEN-LAST:event_userListKeyPressed
 
     private void userListKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_userListKeyReleased
-         if (evt.getKeyCode() == KeyEvent.VK_SHIFT) {
-      shiftPressed = false;
-             
-    }   
+        if (evt.getKeyCode() == KeyEvent.VK_SHIFT) {
+            shiftPressed = false;
+
+        }
     }//GEN-LAST:event_userListKeyReleased
 
     public void updateServerMenu() {
@@ -329,7 +386,6 @@ public class gui extends javax.swing.JFrame implements Observer {
             JMenuItem menuItem = new javax.swing.JMenuItem(server.getName());
             menuItem.setText(server.getName());
 
-           
             menuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ev) {
@@ -341,8 +397,8 @@ public class gui extends javax.swing.JFrame implements Observer {
         }
 
     }
-    
-        @Override
+
+    @Override
     public void update(Observable o, Object arg) {
         message = (String) arg;
         if (!message.equals("")) {
@@ -403,19 +459,19 @@ public class gui extends javax.swing.JFrame implements Observer {
     private javax.swing.JTextArea chatTextList;
     private javax.swing.JMenuItem connectMenuButton;
     private javax.swing.JMenuItem disconnectMenuButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField messageField;
+    private javax.swing.JLabel prefixLabel;
     private javax.swing.JButton sendButton;
     private javax.swing.JMenu serverMenu;
     private javax.swing.JLabel serverNameLabel;
     private javax.swing.JMenuItem settingsMenuButton;
     private javax.swing.JList userList;
     // End of variables declaration//GEN-END:variables
-
-
 
 }

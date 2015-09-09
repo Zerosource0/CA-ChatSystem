@@ -5,6 +5,7 @@
  */
 package ca.gui;
 
+import ca.gui.gui;
 import ca.client.ServerInfo;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
