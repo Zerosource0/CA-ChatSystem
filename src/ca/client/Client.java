@@ -29,13 +29,18 @@ public class Client extends Observable implements Runnable {
     private ArrayList<String> users;
     MessageProcessor msgProcessor;
     public Settings settings;
-
+    private String msg;    
+    
     public Client() {
 
         settings = new Settings(this);
         settings.loadSettings();
         msgProcessor = new MessageProcessor(this);
         users = new ArrayList();
+    }
+
+    public String getMsg() {
+        return msg;
     }
 
     public ArrayList<ServerInfo> getServers() {
@@ -94,7 +99,7 @@ public class Client extends Observable implements Runnable {
 
     @Override
     public void run() {
-        String msg = input.nextLine();  //blocking call
+        msg = input.nextLine();  //blocking call
         msg = msgProcessor.process(msg);
         while (!msg.equals("STOP#")) {
 
