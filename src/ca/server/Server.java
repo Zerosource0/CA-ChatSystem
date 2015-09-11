@@ -22,7 +22,7 @@ public class Server implements Observer {
 
     private static final Properties properties = Utils.initProperties("server.properties");
     ServerSocket ss;
-    private boolean isRunning = true;
+    private static boolean isRunning = true;
     private static ArrayList<ClientHandler> clientList = new ArrayList<ClientHandler>();
 
     public static ArrayList<ClientHandler> getClientList() {
@@ -96,6 +96,10 @@ public class Server implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         sendAll((String) arg);
+    }
+    public static void stopServer()
+    {
+        isRunning=false;
     }
 
 }
