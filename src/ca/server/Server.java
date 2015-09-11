@@ -44,9 +44,12 @@ public class Server implements Observer {
     }
 
     public static void sendToUsers(ArrayList<ClientHandler> reciepients, String msg) {
+        System.out.println("Sending Message to ");     
         for (ClientHandler reciepient : reciepients) {
             reciepient.send(msg);
+            System.out.println(reciepient.getClientName());
         }
+        System.out.println(msg);
     }
 
     public static void sendAll(String msg) {

@@ -20,10 +20,10 @@ public class MessageProcessor {
     }
 
     public String process(String msg) {
-        System.out.println("RECIEVED: " +msg);
+        //System.out.println("Cleint RECIEVED: " +msg);
         
         if (msg.startsWith("MSG#")) {
-            System.out.println("Contains MSG#");
+            //System.out.println("Contains MSG#");
             
             msg = msg.replace("MSG#", "");
             String[] split = msg.split("#");
@@ -32,8 +32,7 @@ public class MessageProcessor {
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("outofBounds"+ e.getStackTrace());
                 return "";
-            }
-            
+            }          
 
         }
 
@@ -50,7 +49,7 @@ public class MessageProcessor {
             msg = "";
         }
         //else return message
-        return msg;
+        return "";
     }
 
     public void addUsersToList(String[] users) {

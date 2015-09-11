@@ -88,7 +88,7 @@ public class Client extends Observable implements Runnable {
     }
 
     public void send(String msg) {
-        System.out.println("SENDING MSG: " + msg);
+        //System.out.println("SENDING MSG: " + msg);
         output.println(msg);
     }
 

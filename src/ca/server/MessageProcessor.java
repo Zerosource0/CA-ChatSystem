@@ -22,19 +22,18 @@ public class MessageProcessor {
 
     public void process(String message) {
         //if message starts with MSG#, remove MSG#-tag. Find cleints and send message to them.
-        if (message.startsWith("MSG#") || message.startsWith("STOP#")) {
+        if (message.startsWith("MSG#")) {
             message = message.replace("MSG#", "");
-            if (message.startsWith("*#")) {
+            if (!message.startsWith("*#")) {
+                findUsers(message);
+            } else {
                 message = message.replace("*#", "");
                 Server.sendAll("MSG#"+origin.getClientName()+"#"+message);
-            } else {
-                findUsers(message);
             }
         }
 
     }
 
-    //TODO, MAKE SURE THAT PERSONS CANT SEND MESSAGES TO A RECIEPIENT MORE THAN ONCE! EX. MSG#USER1,USER1#MESSAGE
     private void findUsers(String message) {
         //Message should look like user,user#Message
         //first split at # to get user,user
@@ -74,16 +73,18 @@ public class MessageProcessor {
                 }
             }
         }
+        
         if (clientRecievers.contains(origin)) {
             clientRecievers.remove(origin);
             origin.send("MSG#Server#You can't message yourself.");
             if (clientRecievers.size() >= 1) {
                 origin.send("MSG#"+origin.getClientName() + "#" + message);
             }
+            
         } else {
             origin.send("MSG#"+origin.getClientName() + "#" + message);
         }
         Server.sendToUsers(clientRecievers, "MSG#" + origin.getClientName() + "#" + message); //send messages to users.
-
+      
     }
 }

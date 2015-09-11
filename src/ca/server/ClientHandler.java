@@ -60,7 +60,7 @@ public class ClientHandler extends Observable implements Runnable {
             
             //Since the message process talks directly to the Server class, we dont need to notify it.
             processor.process(message);
-            
+
             Logger.getLogger(Server.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message.toUpperCase()));
             message = input.nextLine();
         }

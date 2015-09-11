@@ -113,9 +113,7 @@ public class gui extends javax.swing.JFrame implements Observer {
         //Image icon = Toolkit.getDefaultToolkit().getImage("/src/icon/frenchyChaticon16.png");
         this.setIconImages(imageList);
 
-    }
-
-    ;
+    };
     
     public gui() {
 
@@ -124,7 +122,7 @@ public class gui extends javax.swing.JFrame implements Observer {
         this.setTitle("Frenchy Chat");
 
         userList.setModel(new DefaultListModel());
-
+        prefixLabel.setText("");
         disconnectMenuButton.setEnabled(false);
         chatTextList.setEditable(false);
         messageField.requestFocus();
@@ -438,7 +436,7 @@ public class gui extends javax.swing.JFrame implements Observer {
         DefaultListModel listModel = new DefaultListModel();
         for (String user : client.getUsers()) {
             if (user.equals(client.getUserName())) {
-                listModel.addElement(user + "(You)");
+                listModel.addElement(user);
             } else {
                 listModel.addElement(user);
             }

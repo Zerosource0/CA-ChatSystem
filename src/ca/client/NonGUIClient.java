@@ -44,15 +44,15 @@ public class NonGUIClient implements Observer {
         String msg = "";
         while (!msg.equals("STOP#")) {
             msg = scanIn.nextLine();
-            client.send(client.getUserName() + ": " + msg);
+            client.send(msg);
         }
         scanIn.close();
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        recievedMsg = arg.toString();
-        System.out.println("recieved message" + recievedMsg);
+        recievedMsg = (String) arg;
+        System.out.println(recievedMsg);
     }
 
 }
